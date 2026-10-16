@@ -47,15 +47,15 @@ jobs:
         run: |
           make -j$(nproc) 2>&1 | tail -60
 
-      - name: 收集固件 4 件套
+      - name: 收集固件（保持生成原名，不改名）
         id: collect
         run: |
           mkdir -p output
           BIN="bin/targets/mediatek/filogic"
-          cp "$BIN"/*-cmcc_rax3000m-nand-preloader.bin   output/preloader.bin
-          cp "$BIN"/*-cmcc_rax3000m-nand-bl31-uboot.fip output/uboot.bin
-          cp "$BIN"/*-cmcc_rax3000m-recovery.itb output/recovery.itb
-          cp "$BIN"/*-cmcc_rax3000m-sysupgrade.itb  output/sysupgrade.itb
+          cp "$BIN"/*cmcc_rax3000m-nand-preloader.bin   output/
+          cp "$BIN"/*cmcc_rax3000m-nand-bl31-uboot.fip  output/
+          cp "$BIN"/*cmcc_rax3000m-recovery.itb         output/
+          cp "$BIN"/*cmcc_rax3000m-sysupgrade.itb       output/
           echo "--- output 固件清单 ---"
           ls -la output/
 
