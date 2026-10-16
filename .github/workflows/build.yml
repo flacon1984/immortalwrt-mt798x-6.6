@@ -52,17 +52,17 @@ jobs:
         run: |
           mkdir -p output
           BIN="bin/targets/mediatek/filogic"
-          cp "$BIN"/openwrt-*-mediatek-filogic-cmcc_rax3000m-nand-preloader.bin   output/preloader.bin
-          cp "$BIN"/openwrt-*-mediatek-filogic-cmcc_rax3000m-nand-bl31-uboot.fip output/uboot.bin
-          cp "$BIN"/openwrt-*-mediatek-filogic-cmcc_rax3000m-recovery.itb output/recovery.itb
-          cp "$BIN"/openwrt-*-mediatek-filogic-cmcc_rax3000m-sysupgrade.itb  output/sysupgrade.itb
-          echo "--- output 内容 ---"
+          cp "$BIN"/*-cmcc_rax3000m-nand-preloader.bin   output/preloader.bin
+          cp "$BIN"/*-cmcc_rax3000m-nand-bl31-uboot.fip output/uboot.bin
+          cp "$BIN"/*-cmcc_rax3000m-recovery.itb output/recovery.itb
+          cp "$BIN"/*-cmcc_rax3000m-sysupgrade.itb  output/sysupgrade.itb
+          echo "--- output 固件清单 ---"
           ls -la output/
 
       - name: 上传固件到 Actions 产物
         uses: actions/upload-artifact@v4
         with:
-          name: rax3000m-firmware
+          name: rax3000M-firmware
           path: output/
           if-no-files-found: error
 
@@ -70,7 +70,7 @@ jobs:
         if: github.ref == 'refs/heads/openwrt-24.10-6.6'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: rax3000m-${{ github.run_number }}
+          tag_name: rax3000M-${{ github.run_number }}
           name: "RAX3000M 固件 #${{ github.run_number }}"
           files: output/*
           draft: true
