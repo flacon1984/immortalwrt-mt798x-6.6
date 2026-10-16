@@ -47,17 +47,25 @@ jobs:
         run: |
           make -j$(nproc) 2>&1 | tail -60
 
-      - name: 收集固件（保持生成原名，不改名）
+      - name: 收集固件（按生成原名，不改名）
         id: collect
         run: |
           mkdir -p output
           BIN="bin/targets/mediatek/filogic"
-          cp "$BIN"/*cmcc_rax3000m-nand-preloader.bin   output/
-          cp "$BIN"/*cmcc_rax3000m-nand-bl31-uboot.fip  output/
-          cp "$BIN"/*cmcc_rax3000m-recovery.itb         output/
-          cp "$BIN"/*cmcc_rax3000m-sysupgrade.itb       output/
+          echo "--- bin 目录中 rax3000m 相关文件 ---"
+          ls -la "$BIN" | grep -i rax3000m || echo "(未找到 rax3000m 文件)"
+          # 按生成原名收集，不做任何改名
+          cp "$BIN"/*cmcc_rax3000m*.bin output/ 2>/dev/null || true
+          cp "$BIN"/*cmcc_rax3000m*.fip output/ 2>/dev/null || true
+          cp "$BIN"/*cmcc_rax3000m*.itb output/ 2>/dev/null || true
           echo "--- output 固件清单 ---"
           ls -la output/
+          # 验收：sysupgrade 刷机固件必须存在
+          if ! ls output/*sysupgrade*.itb >/dev/null 2>&1; then
+            echo "ERROR: 未收集到 sysupgrade 固件，收集失败"
+            exit 1
+          fi
+          echo "OK: 固件收集完成（保持生成原名）"
 
       - name: 上传固件到 Actions 产物
         uses: actions/upload-artifact@v4
