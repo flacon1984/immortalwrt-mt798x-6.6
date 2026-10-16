@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 180
+    timeout-minutes: 300
     steps:
       - name: 检出源码（你的 fork，openwrt-24.10-6.6 分支）
         uses: actions/checkout@v4
