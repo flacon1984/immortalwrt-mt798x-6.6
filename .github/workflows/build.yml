@@ -1,5 +1,8 @@
 name: Build RAX3000M Firmware
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [openwrt-24.10-6.6]
@@ -54,13 +57,11 @@ jobs:
           BIN="bin/targets/mediatek/filogic"
           echo "--- bin 目录中 rax3000m 相关文件 ---"
           ls -la "$BIN" | grep -i rax3000m || echo "(未找到 rax3000m 文件)"
-          # 按生成原名收集，不做任何改名
           cp "$BIN"/*cmcc_rax3000m*.bin output/ 2>/dev/null || true
           cp "$BIN"/*cmcc_rax3000m*.fip output/ 2>/dev/null || true
           cp "$BIN"/*cmcc_rax3000m*.itb output/ 2>/dev/null || true
           echo "--- output 固件清单 ---"
           ls -la output/
-          # 验收：sysupgrade 刷机固件必须存在
           if ! ls output/*sysupgrade*.itb >/dev/null 2>&1; then
             echo "ERROR: 未收集到 sysupgrade 固件，收集失败"
             exit 1
